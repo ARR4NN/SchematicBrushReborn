@@ -1,9 +1,9 @@
+import com.diffplug.gradle.spotless.SpotlessPlugin
 import de.chojo.PublishData
-import org.cadixdev.gradle.licenser.Licenser
 
 plugins {
     java
-    id("org.cadixdev.licenser") version "0.6.1"
+    id("com.diffplug.spotless") version "6.12.1"
     id("de.chojo.publishdata") version "1.0.9"
 }
 
@@ -12,7 +12,7 @@ version = "2.4.1"
 
 subprojects {
     apply {
-        plugin<Licenser>()
+        plugin<SpotlessPlugin>()
         plugin<JavaPlugin>()
         plugin<PublishData>()
     }
@@ -25,9 +25,12 @@ allprojects {
         maven("https://eldonexus.de/repository/maven-proxies/")
     }
 
-    license {
-        header(rootProject.file("HEADER.txt"))
-        include("**/*.java")
+    spotless {
+        java {
+            licenseHeaderFile(rootProject.file("HEADER.txt"))
+            target("**/*.java")
+        }
+        ratchetFrom("origin/master")
     }
 
     java {
@@ -36,7 +39,7 @@ allprojects {
         withJavadocJar()
     }
 
-    dependencies{
+    dependencies {
         compileOnly("org.spigotmc", "spigot-api", "1.16.5-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains", "annotations", "24.0.0")
         // Due to incompatibility by the yaml versions defined by world edit, fawe and bukkit we need to exclude it everywhere and add our own version...

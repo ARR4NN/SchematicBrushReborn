@@ -54,7 +54,7 @@ publishing {
 
 tasks {
     test {
-        dependsOn(licenseCheck)
+        dependsOn(spotlessApply)
         useJUnitPlatform()
         testLogging {
             events("passed", "skipped", "failed")
